@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 
-export default function ConfirmPage() {
+export default function ConfirmPageClient() {
   const searchParams = useSearchParams();
   const name = searchParams.get("name");
   const age = searchParams.get("age");
