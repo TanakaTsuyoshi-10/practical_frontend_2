@@ -1,0 +1,10 @@
+import { Suspense } from "react";
+import ConfirmPage from "./ConfirmPage";
+
+export default function ConfirmPageWrapper() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ConfirmPage />
+    </Suspense>
+  );
+}
