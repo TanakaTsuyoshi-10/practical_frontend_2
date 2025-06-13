@@ -1,28 +1,20 @@
 "use client";
-// OneCustomerInfoCard を dynamic import で読み込み、SSR（サーバーサイドレンダリング）を無効にする
-// 理由：このコンポーネントは useEffect 内で取得したデータをもとに描画されるため、
-// サーバーが描画する初期HTMLと、クライアントが描画するHTMLが異なってしまい、
-// 「Hydration failed」エラー（＝DOMの不一致）を引き起こす可能性がある。
-// SSRを無効にすることで、クライアントでのみレンダリングされ、DOMのズレが発生しなくなる。
 
+// OneCustomerInfoCard を dynamic import で読み込み、SSR を無効にする
 import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+import BackButton from "./back_button";
+import fetchCustomer from "@/app/customers/fetchCustomer"
 
-// OneCustomerInfoCard を SSR せず、クライアント側でのみ動的に読み込むよう指定
+// SSR 無効でクライアント側だけで読み込むようにする（Hydration mismatch 対策）
 const OneCustomerInfoCard = dynamic(
   () => import("@/app/components/one_customer_info_card.jsx"),
-  {
-    ssr: false,
-  }
+  { ssr: false }
 );
-import BackButton from "./back_button";
-import fetchCustomer from "./fetchCustomer";
-import { useEffect, useState, use } from "react";
 
-export default function ReadPage(props) {
-  const params = use(props.params);
+export default function ReadPage({ params }) {
   const id = params.id;
-
-  const [customerInfo, setCustomerInfo] = useState([]);
+  const [customerInfo, setCustomerInfo] = useState(null);
 
   useEffect(() => {
     const fetchAndSetCustomer = async () => {
@@ -30,14 +22,16 @@ export default function ReadPage(props) {
       setCustomerInfo(customerData);
     };
     fetchAndSetCustomer();
-  }, []);
+  }, [id]);
+
+  if (!customerInfo) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <>
-      <div className="card bordered bg-white border-blue-200 border-2 max-w-sm m-4">
-        <OneCustomerInfoCard {...customerInfo} />
-        <BackButton>戻る</BackButton>
-      </div>
-    </>
+    <div className="card bordered bg-white border-blue-200 border-2 max-w-sm m-4">
+      <OneCustomerInfoCard {...customerInfo} />
+      <BackButton>戻る</BackButton>
+    </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useRef, use } from "react";
 import { useRouter } from "next/navigation";
-import fetchCustomer from "./fetchCustomer";
+import fetchCustomer from "@/app/customers/fetchCustomer"
 import updateCustomer from "./updateCustomer";
 
 export default function UpdatePage(props) {

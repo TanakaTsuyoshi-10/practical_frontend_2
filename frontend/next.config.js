@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone', // Azure でデプロイ可能な最小構成を出力
+  output: 'standalone',
+  experimental: {
+    serverActions: false, // 特に useSearchParams 使用時に明示しておくと安心
+  },
 };
 
 module.exports = nextConfig;
