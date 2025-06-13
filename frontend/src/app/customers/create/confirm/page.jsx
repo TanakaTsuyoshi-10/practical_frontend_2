@@ -1,10 +1,13 @@
+// /src/app/customers/create/confirm/page.jsx
+"use client";
+
 import { Suspense } from "react";
-import ConfirmPage from "./ConfirmPage";
+import ConfirmPageClient from "./ConfirmPageClient";
 
 export default function ConfirmPageWrapper() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <ConfirmPage />
+      <ConfirmPageClient />
     </Suspense>
   );
 }
