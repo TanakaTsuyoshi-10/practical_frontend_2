@@ -10,22 +10,36 @@ export default function CheckPageClient() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const [customer, setCustomer] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchAndSetCustomer = async () => {
       if (id) {
         try {
           const data = await fetchCustomer(id);
-          setCustomer(data[0]);
-        } catch (error) {
-          console.error("顧客情報の取得に失敗しました:", error);
+          if (Array.isArray(data) && data.length > 0) {
+            setCustomer(data[0]);
+          } else {
+            setError("顧客情報が見つかりませんでした。");
+          }
+        } catch (err) {
+          console.error("顧客情報の取得に失敗しました:", err);
+          setError("データ取得時にエラーが発生しました。");
         }
+      } else {
+        setError("IDが指定されていません。");
       }
     };
     fetchAndSetCustomer();
   }, [id]);
 
-  if (!customer) return <div>Loading...</div>;
+  if (error) {
+    return <div className="p-4 text-red-500">{error}</div>;
+  }
+
+  if (!customer) {
+    return <div className="p-4">Loading...</div>;
+  }
 
   return (
     <div className="p-4">
